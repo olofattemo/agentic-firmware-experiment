@@ -20,14 +20,14 @@ copyright = "&copy; 2026 Olof Attemo. [License](https://github.com/olofattemo/ag
     subtitle = "A 5-day coding expedition into ARM Cortex-M microcontrollers"
     [[params.profileMode.buttons]]
       name = "Read the Blog"
-      url = "/posts/"
+      url = "posts/"
     [[params.profileMode.buttons]]
       name = "View on GitHub"
       url = "https://github.com/olofattemo/agentic-firmware-experiment"
 
 [[menu.main]]
   name = "Posts"
-  url = "/posts/"
+  url = "posts/"
   weight = 1
 
 [[menu.main]]
