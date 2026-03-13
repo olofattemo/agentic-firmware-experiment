@@ -1,0 +1,8 @@
+# Hugo
+docs/public/
+docs/resources/
+docs/_vendor/
+.hugo_build.lock
+
+# OS
+.DS_Store

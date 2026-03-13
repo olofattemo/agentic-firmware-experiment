@@ -1,0 +1,41 @@
+baseURL = "https://olofattemo.github.io/agentic-firmware-experiment/"
+languageCode = "en-us"
+title = "Agentic Firmware Experiment"
+copyright = "&copy; 2026 Olof Attemo. [License](https://github.com/olofattemo/agentic-firmware-experiment/blob/main/LICENSE)"
+
+[module]
+  [[module.imports]]
+    path = "github.com/adityatelange/hugo-PaperMod"
+
+[params]
+  env = "production"
+  description = "Development blog and documentation for Agentic Firmware Experiment"
+  author = "Olof Attemo"
+  # Link back to GitHub repo
+  github = "https://github.com/olofattemo/agentic-firmware-experiment"
+
+  [params.profileMode]
+    enabled = true
+    title = "Agentic Firmware Experiment"
+    subtitle = "A 5-day coding expedition into ARM Cortex-M microcontrollers"
+    [[params.profileMode.buttons]]
+      name = "Read the Blog"
+      url = "/posts/"
+    [[params.profileMode.buttons]]
+      name = "View on GitHub"
+      url = "https://github.com/olofattemo/agentic-firmware-experiment"
+
+[[menu.main]]
+  name = "Posts"
+  url = "/posts/"
+  weight = 1
+
+[[menu.main]]
+  name = "GitHub"
+  url = "https://github.com/olofattemo/agentic-firmware-experiment"
+  weight = 2
+
+[[menu.main]]
+  name = "LinkedIn"
+  url = "https://www.linkedin.com/in/olof83"
+  weight = 3
