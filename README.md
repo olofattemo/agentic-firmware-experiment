@@ -2,9 +2,9 @@
 
 [![Website](https://img.shields.io/badge/Website-Live-brightgreen.svg)](https://olofattemo.github.io/agentic-firmware-experiment/)
 
-This repository hosts the blog articles, prompts and source code for my Spring 2026 expedition into the frontier of AI Agents and their reliability in firmware development.
+This repository hosts the blog articles, prompts and source code for my Spring 2026 expedition into the frontier of AI Agents and their reliability when used for firmware development.
 
-Topics range from using using Agentic Coding CLIs like Claude Code, Gemini CLI and associated LLMs to genereate code for the NRF ARM Cortex-M series chips with NRF Connect SDK and Python as primary language for scaffolds.
+Topics range from using using Agentic Coding CLIs like Claude Code, Gemini CLI and associated LLMs with requirements driven workflows, harness customisations and deterministc guardrails to genereate code for the NRF ARM Cortex-M series chips with NRF Connect SDK and Python as primary language for scaffolds.
 
 *Read the series on the project [blog](https://olofattemo.github.io/agentic-firmware-experiment/posts/).
 
