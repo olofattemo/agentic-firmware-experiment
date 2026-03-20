@@ -3,6 +3,11 @@ languageCode = "en-us"
 title = "Agentic Firmware Experiment"
 copyright = "&copy; 2026 Olof Attemo. [License](https://github.com/olofattemo/agentic-firmware-experiment/blob/main/LICENSE)"
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
 [module]
   [[module.imports]]
     path = "github.com/adityatelange/hugo-PaperMod"
