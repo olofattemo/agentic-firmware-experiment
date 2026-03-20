@@ -283,7 +283,7 @@ Full output: [step3](https://github.com/olofattemo/agentic-firmware-experiment/t
 
 This also produced a working example. The monitoring could be confirmed to work by physically detaching the SCL wire, ensuring the LED lit up, and plugging it back in again.
 
-{{< figure src="images/nrf54l15dk-bme280-step3.jpg" alt="nRF54L15-DK with BME280 in step 3" >}}
+{{< figure src="/images/nrf54l15dk-bme280-step3.jpg" alt="nRF54L15-DK with BME280 in step 3" >}}
 
 I was expecting LED1 to map to `led1` (since we do have `led0`–`led3` on the board). Otherwise this instruction was pretty well received.
 
