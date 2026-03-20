@@ -1,5 +1,5 @@
 ---
-title: "Too Much or Too Little — What a Million Tokens Can't Fix"
+title: "Too Much or Too Little: What a Million Tokens Can't Fix"
 date: 2026-03-20T14:01:00Z
 draft: false
 tags: ["Agentic Workflows", "Firmware", "LLM", "ARM Cortex-M", "Context Management"]
@@ -281,19 +281,20 @@ int main(void)
 ```
 Full output: [step3](https://github.com/olofattemo/agentic-firmware-experiment/tree/main/experiments/part2/nrf54ldk-bme280.step3)
 
-This also produced a working example. The monitoring could be confirmed to work by physically detaching the SCL wire, ensuring the LED lit up, and plugging it back in again.
+This also produced a working example. The monitoring could be confirmed to work by physically detaching the SCL wire, ensuring the LED lit up, and plugging it back in again
+to make sure it recovers.
 
-{{< figure src="/images/nrf54l15dk-bme280-step3.jpg" alt="nRF54L15-DK with BME280 in step 3" >}}
+![nRF54L15-DK with BME280 in step 3](https://olofattemo.github.io/agentic-firmware-experiment/images/nrf54l15dk-bme280-step3.jpg)
 
 I was expecting LED1 to map to `led1` (since we do have `led0`–`led3` on the board). Otherwise this instruction was pretty well received.
 
 ## Unintended changes
 
-Our example shows that the LLM is trained on the Zephyr codebase and examples, and it can reasonably correlate build configuration and decode the DTS where we provided a correct initial input — if given access to a repository. The code only uses hardware abstractions that protect us from the most difficult pitfalls.
+Our example shows that the LLM is trained on the Zephyr codebase and examples, and it can reasonably correlate build configuration and decode the DTS where we provided a correct initial input, if given access to a repository. The code only uses hardware abstractions that protect us from the most difficult pitfalls.
 
 However, as we iterate and add more requirements, they fill up the context. The LLM will eventually need to free up context space. It will likely do so either by dropping some of the early details or by summarising the entire context so far. By doing so, it will start forgetting about details like: what LED should we turn on when there is an error reading temperature?
 
-There are also details that are underspecified, that were inferred by the LLM — like how many decimals should the temperature and humidity be printed with? Forgotten and inferred details are more likely to change when we ask for a modification that touches the same area at some later point in time. This is likely to be unacceptable in a real project.
+There are also details that are underspecified, that were inferred by the LLM. For example: How many decimals should the temperature and humidity be printed with? Forgotten and inferred details are more likely to change when we ask for a modification that touches the same area at some later point in time. This is likely to be unacceptable in a real project.
 
 > **Prompt:**  Change the console output so that temperature and humidity are both printed simultaneously on the same line
 
@@ -321,7 +322,7 @@ This is exactly the kind of drift that underspecified requirements invite. Besid
 
 The takeaway of this experiment is that besides model knowledge, context quality and clarity of instructions matter.
 
-To bridge the gaps further, let's consider increasing the clarity of our prompts, or "requirements", as well as the persistence of the details. To some extent, it does not matter if the requirements are for human or LLM consumption — there is value in both persistence and clarity either way.
+To bridge the gaps further, let's consider increasing the clarity of our prompts, or "requirements", as well as the persistence of the details. To some extent, it does not matter if the requirements are for human or LLM consumption. There is value in both persistence and clarity either way.
 
 In real projects we often layer requirements in the stakeholder or user layer, system layer, and software layer. Then we further split them into functional and non-functional, design and interface requirements. How we do this and the exact language we use to describe the layers usually depends on what industry and what kind of certification we are targeting depending on the application.
 
