@@ -1,0 +1,127 @@
+{{- with site.Params.goatcounterCode }}
+<script data-goatcounter="https://{{ . }}.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+{{- end }}
+{{- if .Page.Store.Get "hasMermaid" }}
+<style>
+  :root {
+    --md-standard-fill: #e1f5fe;
+    --md-standard-stroke: #01579b;
+    --md-standard-color: #000;
+    --md-hardware-fill: #fff3e0;
+    --md-hardware-stroke: #e65100;
+    --md-hardware-color: #000;
+    --md-software-fill: #e8f5e9;
+    --md-software-stroke: #1b5e20;
+    --md-software-color: #000;
+    --md-hsi-fill: #fce4ec;
+    --md-hsi-stroke: #880e4f;
+    --md-hsi-color: #000;
+    --md-l4box-fill: #c8e6c9;
+    --md-l4box-stroke: #2e7d32;
+    --md-l4box-color: #000;
+    --md-icd-fill: #e3f2fd;
+    --md-icd-stroke: #0d47a1;
+    --md-icd-color: #000;
+    --md-edge-color: #333;
+    --md-edge-label-bg: #fff;
+    --md-edge-label-color: #333;
+    --md-cluster-fill: #f5f5f5;
+    --md-cluster-stroke: #bbb;
+    --md-cluster-color: #333;
+  }
+  [data-theme="dark"] {
+    --md-standard-fill: #0d47a1;
+    --md-standard-stroke: #64b5f6;
+    --md-standard-color: #e3f2fd;
+    --md-hardware-fill: #bf360c;
+    --md-hardware-stroke: #ffab91;
+    --md-hardware-color: #fbe9e7;
+    --md-software-fill: #1b5e20;
+    --md-software-stroke: #81c784;
+    --md-software-color: #e8f5e9;
+    --md-hsi-fill: #880e4f;
+    --md-hsi-stroke: #f48fb1;
+    --md-hsi-color: #fce4ec;
+    --md-l4box-fill: #2e7d32;
+    --md-l4box-stroke: #a5d6a7;
+    --md-l4box-color: #e8f5e9;
+    --md-icd-fill: #1a237e;
+    --md-icd-stroke: #7986cb;
+    --md-icd-color: #e8eaf6;
+    --md-edge-color: #aaa;
+    --md-edge-label-bg: #1d1e20;
+    --md-edge-label-color: #333;
+    --md-cluster-fill: #1a1a2e;
+    --md-cluster-stroke: #555;
+    --md-cluster-color: #ddd;
+  }
+
+  /* Node class styles */
+  .mermaid .node.standard rect,
+  .mermaid .node.standard polygon {
+    fill: var(--md-standard-fill) !important;
+    stroke: var(--md-standard-stroke) !important;
+    stroke-width: 2px !important;
+  }
+  .mermaid .node.standard .nodeLabel { color: var(--md-standard-color) !important; }
+
+  .mermaid .node.hardware rect,
+  .mermaid .node.hardware polygon {
+    fill: var(--md-hardware-fill) !important;
+    stroke: var(--md-hardware-stroke) !important;
+    stroke-width: 2px !important;
+  }
+  .mermaid .node.hardware .nodeLabel { color: var(--md-hardware-color) !important; }
+
+  .mermaid .node.software rect,
+  .mermaid .node.software polygon {
+    fill: var(--md-software-fill) !important;
+    stroke: var(--md-software-stroke) !important;
+    stroke-width: 2px !important;
+  }
+  .mermaid .node.software .nodeLabel { color: var(--md-software-color) !important; }
+
+  .mermaid .node.hsi rect,
+  .mermaid .node.hsi polygon {
+    fill: var(--md-hsi-fill) !important;
+    stroke: var(--md-hsi-stroke) !important;
+    stroke-width: 3px !important;
+    stroke-dasharray: 5 5 !important;
+  }
+  .mermaid .node.hsi .nodeLabel { color: var(--md-hsi-color) !important; }
+
+  .mermaid .node.l4box rect,
+  .mermaid .node.l4box polygon {
+    fill: var(--md-l4box-fill) !important;
+    stroke: var(--md-l4box-stroke) !important;
+    stroke-width: 2px !important;
+    stroke-dasharray: 4 4 !important;
+  }
+  .mermaid .node.l4box .nodeLabel { color: var(--md-l4box-color) !important; }
+
+  .mermaid .node.icd rect,
+  .mermaid .node.icd polygon {
+    fill: var(--md-icd-fill) !important;
+    stroke: var(--md-icd-stroke) !important;
+    stroke-width: 2px !important;
+    stroke-dasharray: 5 5 !important;
+  }
+  .mermaid .node.icd .nodeLabel { color: var(--md-icd-color) !important; }
+
+  /* Edges and arrows */
+  .mermaid .flowchart-link { stroke: var(--md-edge-color) !important; }
+  .mermaid .marker { fill: var(--md-edge-color) !important; }
+  .mermaid .edgeLabel { background-color: var(--md-edge-label-bg) !important; }
+  .mermaid .edgeLabel p,
+  .mermaid .edgeLabel span { color: var(--md-edge-label-color) !important; }
+
+  /* Subgraph clusters */
+  .mermaid .cluster rect { fill: var(--md-cluster-fill) !important; stroke: var(--md-cluster-stroke) !important; }
+  .mermaid .cluster-label .nodeLabel { color: var(--md-cluster-color) !important; }
+</style>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+</script>
+{{- end }}

@@ -18,6 +18,7 @@ copyright = "&copy; 2026 Olof Attemo. [License](https://github.com/olofattemo/ag
   author = "Olof Attemo"
   # Link back to GitHub repo
   github = "https://github.com/olofattemo/agentic-firmware-experiment"
+  goatcounterCode = "olofattemogithub"
 
   [params.profileMode]
     enabled = true

@@ -3,6 +3,7 @@ title: "The Experiment Begins"
 date: 2026-03-13T14:01:00Z
 draft: false
 tags: ["Agentic Workflows", "Firmware", "LLM", "ARM Cortex-M"]
+summary: "This opening post introduces the 5-part series and discusses how agentic LLM coding is shifting our workflows to empower domain experts. It examines key challenges: the gap between vague natural-language prompts and precision firmware needs, how rapidly evolving interfaces cause LLMs to generate plausible but incorrect code, and the hard limits where LLMs currently aren't helpful. The nRF54L15 SPI errata example illustrates how subtle hardware differences can turn confident LLM output into silent data corruption."
 ---
 
 ## Introduction

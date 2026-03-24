@@ -1,0 +1,20 @@
+<pre class="mermaid">
+  {{- $init := dict -}}
+  {{- range $key, $val := .Attributes -}}
+    {{- $v := $val -}}
+    {{- if findRE `^\d+$` (printf "%v" $val) -}}
+      {{- $v = int $val -}}
+    {{- end -}}
+    {{- $parts := split $key "." -}}
+    {{- if eq (len $parts) 2 -}}
+      {{- $sub := index $init (index $parts 0) | default dict -}}
+      {{- $sub = merge $sub (dict (index $parts 1) $v) -}}
+      {{- $init = merge $init (dict (index $parts 0) $sub) -}}
+    {{- else -}}
+      {{- $init = merge $init (dict $key $v) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $init }}%%{init: {{ . | jsonify }} }%%{{ end }}
+  {{- .Inner | safeHTML }}
+</pre>
+{{- .Page.Store.Set "hasMermaid" true }}

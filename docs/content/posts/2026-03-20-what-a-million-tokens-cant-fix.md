@@ -3,6 +3,7 @@ title: "Too Much or Too Little: What a Million Tokens Can't Fix"
 date: 2026-03-20T14:01:00Z
 draft: false
 tags: ["Agentic Workflows", "Firmware", "LLM", "ARM Cortex-M", "Context Management"]
+summary: "Starting from a naive vibe coding attempt that exposes how LLMs confuse pin allocations for newer hardware, this post walks through iteratively building a working BME280 weather station on the nRF54L15-DK. We explore how context quality affects code generation and show that even correct results degrade as underspecified details drift between iterations. The takeaway is that both prompt clarity and detail persistence matter as much as model capability."
 ---
 
 ## Naive Example: Vibe Coding a Weather Station
