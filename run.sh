@@ -30,7 +30,7 @@ case "$COMMAND" in
             echo "Error: hugo could not be found. Please install it first."
             exit 1
         fi
-        hugo server -D
+        hugo server --bind 0.0.0.0 -D
         ;;
     help)
         usage

@@ -1,0 +1,26 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "nrf-connect",
+			"request": "launch",
+			"name": "Launch nrf54ldk-bme280/build",
+			"config": "${workspaceFolder}/build",
+			"runToEntryPoint": "main"
+		},
+		{
+			"type": "nrf-connect",
+			"request": "launch",
+			"name": "Launch nrf54ldk-bme280/build/nrf54ldk-bme280",
+			"config": "${workspaceFolder}/build/nrf54ldk-bme280",
+			"runToEntryPoint": "main"
+		},
+		{
+			"type": "nrf-connect",
+			"request": "launch",
+			"name": "Launch nrf54ldk-bme280/build/nrf54ldk-bme280/tfm",
+			"config": "${workspaceFolder}/build/nrf54ldk-bme280/tfm",
+			"runToEntryPoint": "main"
+		}
+	]
+}
