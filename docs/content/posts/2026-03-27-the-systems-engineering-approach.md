@@ -60,12 +60,12 @@ flowchart TD
     HW_Phys -.->|Defines physical interface| HSI
     HSI -.->|Consumed by SW requirements process| L3
 ```
+
 See [Appendix](#appendix-system-requirements-concepts-reference) for definitions.
 
 ## Interface Mechanisms
 
 In addition to requirements we need to reason about interfaces as they allow us to separate concerns between layers and domains. This graph shows examples of interface mechanisms in our embedded context that can be versioned independently of other requirements.
-
 
 ```mermaid
 flowchart TD
@@ -105,8 +105,7 @@ flowchart TD
 
 ## The Software Requirements for the Weather Station Example
 
-The examples we are discussing are too trivial for a complete set of process documents, so we will go directly from System Requirements to the Software Requirements Specification layer with an inline SAD section for design requirements and ICDs for interfaces. We will also assert the combined board and overlay DeviceTrees are granular enough to serve as our HSI, and
-finally we are assuming that the LLRs can be inferred completely and that we don't need to spell them out.
+Our example project is too trivial for a complete set of process documents, so we will go directly from System Requirements to the Software Requirements Specification layer with an inline Software Architectural Description section for design requirements and Interface Control Document for interfaces. We will also assert the combined board-and-overlay DeviceTree are granular enough to serve as our HSI. The Devicetree contains only a subset of what must be known to succesfully implement HAL and drivers, but it is enough to map our application layer code to the drivers already provided with Zephyr. We will state in our requirements that they must be resolved to code without introducing new HAL or driver components. Finally we are assuming that the LLRs can be inferred completely and that we don't need to spell them out. This is a leap we can afford in our example since we don't have stringent certification requirements, and that will prove itself experimentally.
 
 First we establish a set of System Requirements (SysRS). Each requirement needs a unique ID which is a bit awkward in markdown but it will become clear later why this is needed. As you can see only the first requirement SyRS-WX-001 is reflected in our naive prompt, and we have taken out the references to hardware as it will be implied by the HSI in another layer. We also add requirements for the monitoring we introduced in the previous post, and clarified that the error state indication must also propagate to console.
 
@@ -117,7 +116,7 @@ First we establish a set of System Requirements (SysRS). Each requirement needs 
 |`SyRS-WX-003`|The system shall detect a sensor communication loss if valid data is not received for 30 seconds, and notify the user via the serial console.|
 |`SyRS-WX-004`|The system shall provide a continuous visual warning via a dedicated hardware indicator (LED) while the sensor communication loss condition is active.|
 
-As per the layered model in the diagram, we combine these requirements with the HSI and get the following combined Software Requirements Specification (SRS): [weatherstation_srs.md](https://github.com/olofattemo/agentic-firmware-experiment/tree/main/experiments/part2/nrf54ldk-bme280.step1/specs/weatherstation_srs.md)
+As per the layered model in the diagram, we combine these requirements with the HSI and get the following combined Software Requirements Specification (SRS): [weatherstation_srs.md](https://github.com/olofattemo/agentic-firmware-experiment/tree/main/experiments/part3/nrf54ldk-bme280.step1/specs/weatherstation_srs.md)
 
 ## Generating code from SRS
 
@@ -190,9 +189,17 @@ Gemini said:
        * CMakeLists.txt: Updated to include all source files.
 </details>
 
-
+\
 The code builds without errors. Below we can see the difference between our previous approach and the new approach with our consolidated SRS
 requirements model.
+
+**Console output:**
+```
+T: 22.0 C, RH: 29 %
+T: 22.2 C, RH: 28 %
+T: 22.2 C, RH: 28 %
+...
+```
 
 \
 **main.c:** 
@@ -280,14 +287,14 @@ void Weather_Sensor_Task_Entry(void *p1, void *p2, void *p3) {
     }
 }
 ```
-Full output: [step1](https://github.com/olofattemo/agentic-firmware-experiment/tree/main/experiments/part2/nrf54ldk-bme280.step1)
+Full output: [step1](https://github.com/olofattemo/agentic-firmware-experiment/tree/main/experiments/part3/nrf54ldk-bme280.step1)
 
 See the difference? Unlike our previous attempts, the link between intent and code becomes clear.
-We previously discovered that the LLM  we are using has enough training on Zephyr and our board to successfully reason about DeviceTree, Kconfig and other concepts we depend on for the design. Now we have introduced more granular, clear and explicitly separated functional requirements alongside design and interface sections for precision, and introduced a persistence format in the form of a consolidated Software Requirements Specification. We also added traceability to code in the generation step which makes the mapping between requirements and code easy to see and understand.
+We previously discovered that the LLM  we are using has enough training on Zephyr and our board to successfully reason about DeviceTree, Kconfig and other concepts we depend on for the design. Now we have introduced more granular, clear and explicitly separated functional requirements alongside design and interface sections for precision, and introduced a persistence format in the form of a consolidated Software Requirements Specification. We also added traceability to code in the generation step which makes the mapping between requirements and code easy to see and understand. It is much less likely that we will be breaking this implementaiton unintentionally now as the requirements change.
 
 ## Summary and Next Steps
 
-Next time we will explore the benefits of this approach and how we can make it work for us despite the apparent increase in granularity of instructions we have to manage.
+Next time we will explore the benefits of this approach and how we can use LLMs to manage the increase in granularity of instructions that we added to the workflow.
 
 ## Appendix: System Requirements Concepts Reference
 
