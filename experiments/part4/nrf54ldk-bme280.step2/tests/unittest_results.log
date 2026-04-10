@@ -1,0 +1,57 @@
+*** Booting nRF Connect SDK v3.2.2-74845e169be2 ***
+*** Using Zephyr OS v4.2.99-fe4f0106803e ***
+Running TESTSUITE console_interface_tests
+===================================================================
+START - test_error_format
+ PASS - test_error_format in 0.000 seconds
+===================================================================
+START - test_weather_format
+ PASS - test_weather_format in 0.000 seconds
+===================================================================
+TESTSUITE console_interface_tests succeeded
+Running TESTSUITE weather_monitor_tests
+===================================================================
+START - test_error_state_logic
+ PASS - test_error_state_logic in 0.000 seconds
+===================================================================
+START - test_staleness_calculation
+ PASS - test_staleness_calculation in 0.000 seconds
+===================================================================
+TESTSUITE weather_monitor_tests succeeded
+Running TESTSUITE weather_sensor_tests
+===================================================================
+START - test_humidity_validation
+ PASS - test_humidity_validation in 0.000 seconds
+===================================================================
+START - test_temperature_validation
+ PASS - test_temperature_validation in 0.000 seconds
+===================================================================
+TESTSUITE weather_sensor_tests succeeded
+Running TESTSUITE weather_shared_mem_tests
+===================================================================
+START - test_write_read_cycle
+ PASS - test_write_read_cycle in 0.000 seconds
+===================================================================
+TESTSUITE weather_shared_mem_tests succeeded
+
+------ TESTSUITE SUMMARY START ------
+
+SUITE PASS - 100.00% [console_interface_tests]: pass = 2, fail = 0, skip = 0, total = 2 duration = 0.000 seconds
+ - PASS - [console_interface_tests.test_error_format] duration = 0.000 seconds
+ - PASS - [console_interface_tests.test_weather_format] duration = 0.000 seconds
+
+SUITE PASS - 100.00% [weather_monitor_tests]: pass = 2, fail = 0, skip = 0, total = 2 duration = 0.000 seconds
+ - PASS - [weather_monitor_tests.test_error_state_logic] duration = 0.000 seconds
+ - PASS - [weather_monitor_tests.test_staleness_calculation] duration = 0.000 seconds
+
+SUITE PASS - 100.00% [weather_sensor_tests]: pass = 2, fail = 0, skip = 0, total = 2 duration = 0.000 seconds
+ - PASS - [weather_sensor_tests.test_humidity_validation] duration = 0.000 seconds
+ - PASS - [weather_sensor_tests.test_temperature_validation] duration = 0.000 seconds
+
+SUITE PASS - 100.00% [weather_shared_mem_tests]: pass = 1, fail = 0, skip = 0, total = 1 duration = 0.000 seconds
+ - PASS - [weather_shared_mem_tests.test_write_read_cycle] duration = 0.000 seconds
+
+------ TESTSUITE SUMMARY END ------
+
+===================================================================
+PROJECT EXECUTION SUCCESSFUL

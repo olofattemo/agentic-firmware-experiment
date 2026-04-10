@@ -1,0 +1,10 @@
+{
+    "nrf-connect.debugging.bindings": {
+        "${workspaceFolder}/build": "Launch nrf54ldk-bme280/build",
+        "${workspaceFolder}/build/nrf54ldk-bme280": "Launch nrf54ldk-bme280/build/nrf54ldk-bme280",
+        "${workspaceFolder}/build/nrf54ldk-bme280/tfm": "Launch nrf54ldk-bme280/build/nrf54ldk-bme280/tfm"
+    },
+    "nrf-connect.applications": [
+        "${workspaceFolder}/tests"
+    ]
+}
