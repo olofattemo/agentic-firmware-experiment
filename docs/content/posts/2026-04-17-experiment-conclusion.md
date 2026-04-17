@@ -1,7 +1,7 @@
 ---
 title: "Experiment Conclusions"
 date: 2026-04-17T10:01:00Z
-draft: true
+draft: false
 tags: ["Agentic Workflows", "Firmware", "LLM", "Systems Engineering"]
 summary: "The finale addresses LLM token limits by proposing specification partitioning and categorizes common AI failure modes like sycophancy and factual conflicts. It concludes that while AI is currently not for bare metal coding, it is useful for systems engineering, requirements drafting, and generating testable traceability."
 ---
@@ -15,21 +15,19 @@ Finally I will elaborate on what I think is currently more and less workable whe
 
 ## Scaling requirements driven code generation with specification size
 
-In the previous post, the spec "weatherstation_srs_with_llrs_out.md" is about 3k tokens. As we expect model attention to degrade
-rather rapidly with the number of tokens we should assume a practical limit of 25-50% of the max input size can be used. For the
-LLM we are using that is in the range of 250k-500k tokens. We also need to consider the limit to the number of tokens can be used
-for output which is only 64k. Gemini 3.1 Pro is a thinking model and the thinking output counts toward the output limit.
-When examining the logs from step1 in part 4 ("SRS with LLRs to Code with Traces and Unit Tests"). Gemini CLI breaks the main generation phase into multiple API calls:
+In the previous post, the spec "weatherstation_srs_with_llrs_out.md" is about 3k tokens. As we expect model attention to degrade rather rapidly with the number of tokens we should assume a practical limit of 25-50% of the max input size can be used.
+For the LLM we are using that is in the range of 250k-500k tokens. We also need to consider the limit to the number of tokens can be used for output which is only 64k. Gemini 3.1 Pro is a thinking model and the thinking output counts toward the output limit.
+When examining the logs from the single prompt action in step1 of part 4 ("SRS with LLRs to Code with Traces and Unit Tests"). Gemini CLI breaks the main generation phase into multiple API calls (reverse order):
 
-| Step | Process Phase | Input (tokens) | Thought (tokens) | Output (tokens) |
-| :--- | :--- | :--- | :--- | :--- | :-- |
-| 5 |**Test File Creation** | 28096 | 2046 | 241 | 
-| 4 |**File Creation** | 18216 | 4525 | 2588 | 
-| 3 |**Development Process** | 16514 | 1071 | 40 | 
-| 2 |**Analyzing Structure** | 15995 | 190 | 86 | 
-| 1 |**File Analysis** | 12559 | 314 | 33 | 
+| Step | Process Phase | Input (tokens) | Thought (tokens) | Output (tokens) | Description |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 5 |**Test File Creation** | 28096 | 2046 | 241 | Unit test (z-test) generation |
+| 4 |**File Creation** | 18216 | 4525 | 2588 | Firmware code generation |
+| 3 |**Development Process** | 16514 | 1071 | 40 | Evaluating how to generate code |
+| 2 |**Analyzing Structure** | 15995 | 190 | 86 | Reading the repo context (inc DeviceTree) |
+| 1 |**File Analysis** | 12559 | 314 | 33 | Reading the weatherstation_srs_with_llrs_out.md specification |
 
-Notice how the input size with spec and context grows up to 28k tokens in step 5. Conclusion here is that we will start having scaling issues at ~10x the size of our current specification. The limits are both in input attention, and output saturation on the file creation steps.
+Notice as each step accumulates input tokens, and how the input size with spec and context grows up to 28k tokens in step 5. Conclusion here is that we will start having scaling issues at ~10x the size of our current specification. The limits are both in input attention, and output saturation on the file creation steps. The thought process generates a considerable amount of output and we need to make sure it does not cause the code output to be truncated.
 In a larger project we need multiple independent specs, but we can also partition them using the SAD-mappings we already introduced. This would require a scheduler to resolve the references and feed each partition to the LLM separately. Relevant interface specifications are shared to define connections between the parts while HSI and shared NFRs would have to be replicated into each partition by the scheduler.
 
 ```mermaid
@@ -77,56 +75,42 @@ flowchart TD
 
 ### 1. Factual knowledge conflicts
 
-The model produces plausible output based on training data that is wrong, outdated, or conflated across similar but distinct sources.
+The model produces plausible output based on training data that is wrong, outdated, or conflated across similar but distinct sources. Sparse, stale, or conflated knowledge in training data, combined with tendency to produce confident output without flagging when confidence is low.
 
 **Examples:**
 - Fabrication of details about specific hardware it was not meaningfully trained on. [[Part 2: Naive Example]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-03-20-what-a-million-tokens-cant-fix/#naive-example-vibe-coding-a-weather-station)
 - Conflating interfaces across chip revisions because older or more common hardware dominates the training corpus. [[Part 1: LLMs trained on evolving interfaces]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-03-13-the-experiment-begins/#llms-trained-on-evolving-interfaces)
 
-**Cause:**
-Sparse, stale, or conflated knowledge in training data, combined with tendency to produce confident output without flagging when confidence is low.
-
 **Mitigation:**
 Inject authoritative documentation (datasheets, errata, devicetree) as context. Constrain the model to use existing vetted drivers rather than generate new ones.
 
-### 2. Requirement conflicts
+### 2. Requirement ambiguity
 
-The model generates output that deviates from stated requirements because it filled gaps silently.
+The model generates output that deviates from stated requirements because it filled gaps silently. Requirements as typically written in plain English are too vague for direct LLM consumption. The model must produce complete output and will infer defaults when requirements are ambiguous.
 
 **Examples:**
 - Resolving unspecified aspects using training distribution defaults rather than flagging the ambiguity. [[Part 2: Unintended changes]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-03-20-what-a-million-tokens-cant-fix/#unintended-changes)
 - Generated code that matches the model's interpretation of the requirement rather than the requirement itself. [[Part 4: Analysing the output]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-04-10-the-requirements-pipeline/#analysing-the-output)
 
-**Cause:**
-Requirements as typically written in plain English are too vague for direct LLM consumption. The model must produce complete output and will infer defaults when requirements are ambiguous.
-
-**Mitigation**
+**Mitigation:**
 Formal requirements with explicit format, range, and behavior constraints. Pinned specification sets in context. Deterministic trace checking that verifies 1:1 mapping between implementation and requirements.
 
-
 ### 3. Lost in the middle
-As specifications and conversation history grow, the model attends more strongly to content at the beginning and end of its context than to content in the middle. Requirements clearly stated early in a session get dropped or silently reinterpreted as context accumulates. 
+As specifications and conversation history grow, the model attends more strongly to content at the beginning and end of its context than to content in the middle. Requirements clearly stated early in a session get dropped or silently reinterpreted as context accumulates. Also attention to middle tokens is structurally lower than attention to beginning and end tokens, regardless of instruction importance.
 
 **Examples:**
-- Early requirements fade as new instructions accumulate. [[Part 2: Unintended changes]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-03-20-what-a-million-tokens-cant-fix/#unintended-changes)
-- Requirements placed in the middle of a long document receive less model attention than those at the edges. [[Part 4: The maximum size of a requirements document]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-04-17-experiment-conclusion.md/#scaling-requirements-driven-code-generation-with-specification-size)
-
-**Cause:**
-Attention to middle tokens is structurally lower than attention to beginning and end tokens, regardless of instruction importance.
+- Requirements placed in the middle of a long document receive less model attention than those at the edges. [[Part 4: The maximum size of a requirements document]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-04-17-experiment-conclusion/#scaling-requirements-driven-code-generation-with-specification-size)
 
 **Mitigation:**
 Pinning specifications as baselined artifacts that are re-injected rather than compacted. Keeping individual specification artifacts within sizes where middle-position degradation is acceptable.
 
 ### 4. Sycophancy (and framing effects)
-The model produces output shaped by what it perceives the user wants rather than by what is true. 
+The model produces output shaped by what it perceives the user wants rather than by what is true. Models are by default biased to respond in ways that rewards agreement, compliance, and producing expected outputs over producing truthful ones.
 
 **Examples:**
 - Confidently produces wrong output, then reverses equally confidently when challenged. [[Part 2: Naive Example]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-03-20-what-a-million-tokens-cant-fix/#naive-example-vibe-coding-a-weather-station)
-- Produces documentation claiming coverage or verification that doesn't exist. [[Part 4: Analysing the output]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-04-10-the-requirements-pipeline/#analysing-the-output)
 - Accepts an implicit framing the user introduces, even when alternatives exist. [[Part 4: Analysing the output]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-04-10-the-requirements-pipeline/#analysing-the-output)
-
-**Cause:**
-Models are by default biased to respond in ways that rewards agreement, compliance, and producing expected outputs over producing truthful ones.
+- Produces documentation claiming coverage or verification that doesn't exist. [[Part 4: Analysing the output]](https://olofattemo.github.io/agentic-firmware-experiment/posts/2026-04-10-the-requirements-pipeline/#analysing-the-output)
 
 **Mitigation:**
 Deterministic external verification that doesn't depend on the model's self-assessment (the traceability linter). Not treating conversational correction as a verification mechanism. 
@@ -137,9 +121,9 @@ Explicit instruction to the model to report what it did not do and why, and to l
 |Category|Suggested mitigation|
 |--|--|
 |1. Factual knowledge conflicts|Curation of authoritative context, use vetted drivers/HAL|
-|2. Requirement conflicts (ie ambiguity)|Formal requirements, curated specification, traceability|
+|2. Requirement ambiguity|Formal requirements, curated specification, traceability|
 |3. Lost in the middle|Curated specification, specification size management|
-|4. Sycophancy (and framing effects)|Determinisitic external verification, open framing|
+|4. Sycophancy (and framing effects)|Deterministic external verification, open framing|
 
 
 ## Recommendations on the current state of AI agents and firmware development
