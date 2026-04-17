@@ -13,6 +13,7 @@ copyright = "&copy; 2026 Olof Attemo. [License](https://github.com/olofattemo/ag
     path = "github.com/adityatelange/hugo-PaperMod"
 
 [params]
+  defaultTheme = "light"
   env = "production"
   description = "Development blog and documentation for Agentic Firmware Experiment"
   author = "Olof Attemo"
