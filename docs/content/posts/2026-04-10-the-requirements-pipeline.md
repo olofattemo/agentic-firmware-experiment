@@ -17,6 +17,7 @@ We asserted that we could use the DTS/DeviceTree as HSI in our situation. We did
 ### The maximum size of a requirements document
 
 There is another issue which we don't have time to address regarding how to break down the requirements into parts when they grow too large for the LLM to handle. In a large module, parts of the instructions could be omitted by the LLM without notice. We need to be able to split our solution into independent parts that could be generated and verified separately. Nonfunctional requirements would increase the size when applied to everything, so we left them out at this point. In practice there will be limits to how many 1:all requirements we can have as they always need to be in context.
+Update 2026-04-17: I decided to elaborate a bit on how this can be adressed in the final post.
 
 ### We may need the LLRs to verify the output
 
